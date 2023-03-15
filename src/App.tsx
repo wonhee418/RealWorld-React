@@ -1,31 +1,29 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { RouterProvider } from "react-router-dom";
+import { RecoilRoot } from "recoil";
+import Footer from "./components/common/Footer";
+import Header from "./components/common/header/Header";
+import Home from "./pages/Home";
+import ReactRouterObject from "./routes";
 
-function merge<T, U>(objA: T, objB: U) {
-  return Object.assign(objA, objB); //
-}
-
-const mergedObj = merge({ name: "kim", hobbies: ["Sports"] }, { age: 28 });
-console.log(mergedObj); // { name: "kim", hobbies:["sprots"], age:28}
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <RecoilRoot>
+        <QueryClientProvider client={queryClient}>
+          <Header />
+          {/* TODO: fallbackElement는 앱이 작동중이라는것을 표시하기위한 컴포넌트를 사용권장 */}
+          <RouterProvider
+            router={ReactRouterObject}
+            fallbackElement={<Home />}
+          />
+          <Footer />
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      </RecoilRoot>
     </div>
   );
 }
