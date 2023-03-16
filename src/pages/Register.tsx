@@ -1,12 +1,29 @@
 import useAuth from "../constants/auth/useAuth";
+import { useRegex } from "../constants/regex";
 
 const Register = () => {
   const { signUp } = useAuth();
+  const { usernameCheckHandle, emailCheckHandle, passwordCheckHandle } =
+    useRegex();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
+
+    if (!usernameCheckHandle(formData.get("username"))) {
+      return alert("이름은 8자 이상 16자 이하입니다.");
+    }
+
+    if (!emailCheckHandle(formData.get("email"))) {
+      return alert("이메일 형식이 아닙니다.");
+    }
+
+    if (!passwordCheckHandle(formData.get("password"))) {
+      return alert(
+        "비밀번호는 숫자와 문자 포함 형태의 6~12자리 이내여야합니다."
+      );
+    }
 
     const User = {
       user: {
@@ -15,7 +32,6 @@ const Register = () => {
         password: formData.get("password")!.toString(),
       },
     };
-    console.log(User);
     signUp(User);
   };
 
