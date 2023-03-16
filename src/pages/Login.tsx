@@ -1,4 +1,20 @@
+import useAuth from "../constants/auth/useAuth";
+
 const Login = () => {
+  const { signIn } = useAuth();
+
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const User = {
+      user: {
+        email: formData.get("email")!.toString(),
+        password: formData.get("password")!.toString(),
+      },
+    };
+    signIn(User);
+  };
+
   return (
     <div className="auth-page">
       <div className="container page">
@@ -13,19 +29,13 @@ const Login = () => {
               <li>That email is already taken</li>
             </ul>
 
-            <form>
-              <fieldset className="form-group">
-                <input
-                  className="form-control form-control-lg"
-                  type="text"
-                  placeholder="Your Name"
-                />
-              </fieldset>
+            <form onSubmit={onSubmit}>
               <fieldset className="form-group">
                 <input
                   className="form-control form-control-lg"
                   type="text"
                   placeholder="Email"
+                  name="email"
                 />
               </fieldset>
               <fieldset className="form-group">
@@ -33,6 +43,7 @@ const Login = () => {
                   className="form-control form-control-lg"
                   type="password"
                   placeholder="Password"
+                  name="password"
                 />
               </fieldset>
               <button className="btn btn-lg btn-primary pull-xs-right">

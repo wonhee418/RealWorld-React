@@ -1,1 +1,3 @@
-export const queryKey = {};
+export const queryKey = {
+  user: "user",
+};

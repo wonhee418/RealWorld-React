@@ -5,12 +5,13 @@ import { QueryClient } from "react-query";
 // const errorNotify = (value: string) => toast.error(value, { autoClose: 2000 });
 
 const queryErrorHandler = (error: unknown) => {
-  //   if (isAxiosError(error)) {
-  //     if (error.response?.status === 400)
-  //       errorNotify(error.response.data.details.toString());
-  //   } else {
-  //     errorNotify(JSON.stringify(error));
-  //   }
+  console.log("error :" + error);
+  if (isAxiosError(error)) {
+    if (error.response?.status === 422)
+      console.log(error.response.data.details.toString());
+  } else {
+    console.log(JSON.stringify(error));
+  }
 };
 
 export const queryClient = new QueryClient({

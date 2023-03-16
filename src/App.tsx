@@ -1,13 +1,12 @@
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { RouterProvider } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import Footer from "./components/common/Footer";
 import Header from "./components/common/header/Header";
+import { queryClient } from "./lib/react-query/queryClient";
 import Home from "./pages/Home";
 import ReactRouterObject from "./routes";
-
-const queryClient = new QueryClient();
 
 function App() {
   return (
