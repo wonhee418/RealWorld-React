@@ -1,20 +1,28 @@
-import { useEffect, useState } from "react";
+import { ReactNode } from "react";
 import { useRecoilValue } from "recoil";
 import { isLoggedInAtom } from "../atom/atom";
 import ArticleItem from "../components/article/ArticleItem";
 import { useGetArticle } from "../hooks/article/useGetArticle";
+import { useGetTag } from "../hooks/tag/useGetTag";
 import { Article } from "../types/article";
+import { Tag } from "../types/tag";
 
 const Home = () => {
   const isLogged = useRecoilValue(isLoggedInAtom);
-  const { article, isLoading, isError, error, refetch } = useGetArticle();
+  const article = useGetArticle();
+  const tag = useGetTag();
+  console.log(article);
 
-  if (isLoading) {
+  console.log(tag.tag);
+
+  if (article.isLoading) {
     return <p>로딩중 ..</p>;
   }
 
-  if (isError) {
-    return <p>에러.. ! {error?.message}</p>;
+  //
+
+  if (article.isError) {
+    return <p>에러.. ! {article.error?.message}</p>;
   }
 
   return (
@@ -36,7 +44,7 @@ const Home = () => {
                 <li className="nav-item">Global Feed</li>
               </ul>
             </div>
-            {article?.map((article: Article, i) => {
+            {article.article?.map((article: Article, i) => {
               return <ArticleItem {...article} key={i} />;
             })}
           </div>
@@ -45,30 +53,14 @@ const Home = () => {
             <div className="sidebar">
               <p>Popular Tags</p>
               <div className="tag-list">
-                <a href="" className="tag-pill tag-default">
-                  programming
-                </a>
-                <a href="" className="tag-pill tag-default">
-                  javascript
-                </a>
-                <a href="" className="tag-pill tag-default">
-                  emberjs
-                </a>
-                <a href="" className="tag-pill tag-default">
-                  angularjs
-                </a>
-                <a href="" className="tag-pill tag-default">
-                  react
-                </a>
-                <a href="" className="tag-pill tag-default">
-                  mean
-                </a>
-                <a href="" className="tag-pill tag-default">
-                  node
-                </a>
-                <a href="" className="tag-pill tag-default">
-                  rails
-                </a>
+                {/* HACK: any type 변경 필요  */}
+                {tag.tag?.map((tagValue: any) => {
+                  return (
+                    <span className="tag-pill tag-default cursor-pointer">
+                      {tagValue}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           </div>

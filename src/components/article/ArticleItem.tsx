@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Article } from "../../types/article";
 
 const ArticleItem = (props: Article) => {
@@ -13,6 +14,7 @@ const ArticleItem = (props: Article) => {
     tagList,
     title,
   } = props;
+  const navigate = useNavigate();
   return (
     <div className="article-preview">
       <div className="article-meta">
@@ -27,7 +29,10 @@ const ArticleItem = (props: Article) => {
           <i className="ion-heart"></i> {favoritesCount}
         </button>
       </div>
-      <span className="preview-link">
+      <span
+        className="preview-link"
+        onClick={() => navigate("/article", { state: slug })}
+      >
         <h1>{title}</h1>
         <p>{description}</p>
         <span>Read more...</span>

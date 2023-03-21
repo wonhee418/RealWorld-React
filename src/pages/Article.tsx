@@ -1,28 +1,41 @@
+import { useLocation } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { isLoggedInAtom } from "../atom/atom";
+import { getStorageUser } from "../constants/user/userStorge";
+import { useGetDetailArticle } from "../hooks/article/useGetDetailArticle";
+
 const Article = () => {
+  const { state } = useLocation();
+  const { article, isLoading, isError, error, refetch } =
+    useGetDetailArticle(state);
+  const myProfile = useRecoilValue(isLoggedInAtom);
+  console.log(myProfile);
+
   return (
     <div className="article-page">
       <div className="banner">
         <div className="container">
-          <h1>How to build webapps that scale</h1>
+          <h1>{article?.title}</h1>
 
           <div className="article-meta">
             <a href="">
-              <img src="http://i.imgur.com/Qr71crq.jpg" />
+              <img src={article?.author.image} />
             </a>
             <div className="info">
               <a href="" className="author">
-                Eric Simons
+                {article?.author.username}
               </a>
-              <span className="date">January 20th</span>
+              <span className="date">{article?.createdAt}</span>
             </div>
             <button className="btn btn-sm btn-outline-secondary">
               <i className="ion-plus-round"></i>
-              &nbsp; Follow Eric Simons <span className="counter">(10)</span>
+              &nbsp; Follow {article?.author.username}
             </button>
             &nbsp;&nbsp;
             <button className="btn btn-sm btn-outline-primary">
               <i className="ion-heart"></i>
-              &nbsp; Favorite Post <span className="counter">(29)</span>
+              &nbsp; Favorite Post
+              <span className="counter">({article?.favoritesCount})</span>
             </button>
           </div>
         </div>
@@ -31,36 +44,44 @@ const Article = () => {
       <div className="container page">
         <div className="row article-content">
           <div className="col-md-12">
-            <p>
-              Web development technologies have evolved at an incredible clip
-              over the past few years.
-            </p>
-            <h2 id="introducing-ionic">Introducing RealWorld.</h2>
-            <p>It`s a great solution for learning how other frameworks work.</p>
+            <p>{article?.body}</p>
           </div>
         </div>
+        <ul className="tag-list mb-4">
+          {article?.tagList.map((tag) => {
+            return (
+              <li
+                className="tag-default tag-pill tag-outline ng-binding ng-scope"
+                key={tag}
+              >
+                {tag}
+              </li>
+            );
+          })}
+        </ul>
 
         <hr />
 
         <div className="article-actions">
           <div className="article-meta">
             <a href="profile.html">
-              <img src="http://i.imgur.com/Qr71crq.jpg" />
+              <img src={article?.author.image} />
             </a>
-            <div className="info">
+            <div className="info text-[#5CB85C]">
               <a href="" className="author">
-                Eric Simons
+                {article?.author.username}
               </a>
-              <span className="date">January 20th</span>
+              <span className="date">{article?.createdAt}</span>
             </div>
             <button className="btn btn-sm btn-outline-secondary">
               <i className="ion-plus-round"></i>
-              &nbsp; Follow Eric Simons
+              &nbsp; Follow {article?.author.username}
             </button>
             &nbsp;
             <button className="btn btn-sm btn-outline-primary">
               <i className="ion-heart"></i>
-              &nbsp; Favorite Post <span className="counter">(29)</span>
+              &nbsp; Favorite Post
+              <span className="counter">({article?.favoritesCount})</span>
             </button>
           </div>
         </div>
@@ -76,10 +97,7 @@ const Article = () => {
                 ></textarea>
               </div>
               <div className="card-footer">
-                <img
-                  src="http://i.imgur.com/Qr71crq.jpg"
-                  className="comment-author-img"
-                />
+                <img src={myProfile.image} className="comment-author-img" />
                 <button className="btn btn-sm btn-primary">Post Comment</button>
               </div>
             </form>

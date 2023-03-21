@@ -38,7 +38,7 @@ const RouterInfo: RouterItem[] = [
     withAuthorization: false,
   },
   {
-    path: "/aticle",
+    path: "/article",
     elemnet: <Article />,
     withAuthorization: true,
   },
