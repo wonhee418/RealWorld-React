@@ -1,4 +1,28 @@
+import { useQuery } from "react-query";
+import { getUser } from "../api/user";
+import { Myprofile } from "../types/user";
+
 const Setting = () => {
+  const {
+    data: user,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery<Myprofile>("user", () => getUser("wonhee123"));
+
+  // const { bio, following, image, username, email } = user as Myprofile;
+  console.log(user);
+  console.log(isLoading);
+  console.log(isError);
+
+  if (isLoading) {
+    return isLoading && <p>로딩중..</p>;
+  }
+
+  if (isError) {
+    return <p>에러.. !</p>;
+  }
   return (
     <div className="settings-page">
       <div className="container page">

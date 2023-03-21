@@ -1,9 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import useAuth from "../constants/auth/useAuth";
 import { useRegex } from "../constants/regex";
 
 const Login = () => {
   const { signIn } = useAuth();
   const { emailCheckHandle, passwordCheckHandle } = useRegex();
+  const navigate = useNavigate();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -33,15 +35,18 @@ const Login = () => {
       <div className="container page">
         <div className="row">
           <div className="col-md-6 offset-md-3 col-xs-12">
-            <h1 className="text-xs-center">Sign in</h1>
-            <p className="text-xs-center">
-              <a href="/register">Need an account?</a>
+            <h1 className="text-xs-center text-[40px] pb-4">Sign in</h1>
+            <p className="text-xs-center pb-4">
+              <span
+                className=" cursor-pointer "
+                onClick={() => navigate("/register")}
+              >
+                Need an account?
+              </span>
             </p>
-
-            <ul className="error-messages">
+            {/* <ul className="error-messages">
               <li>That email is already taken</li>
-            </ul>
-
+            </ul> */}
             <form onSubmit={onSubmit}>
               <fieldset className="form-group">
                 <input

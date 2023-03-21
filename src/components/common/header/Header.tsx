@@ -1,48 +1,28 @@
+import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { isLoggedInAtom } from "../../../atom/atom";
+import { Myprofile } from "../../../types/user";
+import LoginGnb from "../gnb/LoginGnb";
+import LogoutGnb from "../gnb/LogoutGnb";
 
 const Header = () => {
-  const isLogged = useRecoilValue(isLoggedInAtom);
+  const isLogged = useRecoilValue<Myprofile>(isLoggedInAtom);
+  const navigate = useNavigate();
 
   return (
     <>
       <nav className="navbar navbar-light">
         <div className="container">
-          <a className="navbar-brand" href="/">
-            conduit
-          </a>
+          <span className="navbar-brand">conduit</span>
           <ul className="nav navbar-nav pull-xs-right">
-            <li className="nav-item">
-              <a className="nav-link active" href="/">
-                Home
-              </a>
+            <li
+              className="nav-item cursor-pointer"
+              onClick={() => navigate("/")}
+            >
+              <span className="nav-link active">Home</span>
             </li>
-            <li className="nav-item">
-              {isLogged && (
-                <a className="nav-link" href="/create">
-                  {" "}
-                  <i className="ion-compose"></i>&nbsp;New Article{" "}
-                </a>
-              )}
-            </li>
-            <li className="nav-item">
-              {isLogged && (
-                <a className="nav-link" href="/profile/setting">
-                  {" "}
-                  <i className="ion-gear-a"></i>&nbsp;Settings{" "}
-                </a>
-              )}
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/login">
-                Sign in
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/register">
-                Sign up
-              </a>
-            </li>
+            {isLogged && <LoginGnb onNavigate={navigate} />}
+            {!isLogged && <LogoutGnb onNavigate={navigate} />}
           </ul>
         </div>
       </nav>

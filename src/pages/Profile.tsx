@@ -1,19 +1,31 @@
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { isLoggedInAtom } from "../atom/atom";
+import { Myprofile } from "../types/user";
+
 const Profile = () => {
+  const myProfile = useRecoilValue<Myprofile>(isLoggedInAtom);
+  const { email, username, image } = myProfile;
+  const navigate = useNavigate();
+
   return (
     <div className="profile-page">
       <div className="user-info">
         <div className="container">
           <div className="row">
-            <div className="col-xs-12 col-md-10 offset-md-1">
-              <img src="http://i.imgur.com/Qr71crq.jpg" className="user-img" />
-              <h4>Eric Simons</h4>
+            <div className="col-xs-12 col-md-10 offset-md-1 text-center">
+              <img src={image} className="user-img inline-block" />
+              <h4>{username}</h4>
               <p>
                 Cofounder @GoThinkster, lived in Aol`s HQ for a few months,
                 kinda looks like Peeta from the Hunger Games
               </p>
-              <button className="btn btn-sm btn-outline-secondary action-btn">
-                <i className="ion-plus-round"></i>
-                &nbsp; Follow Eric Simons
+              <button
+                className="btn btn-sm btn-outline-secondary action-btn"
+                onClick={() => navigate("/setting")}
+              >
+                <i className="ion-gear-a"></i>
+                &nbsp; Edit Profile Settings
               </button>
             </div>
           </div>

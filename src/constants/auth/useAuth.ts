@@ -1,27 +1,32 @@
 import { AxiosError } from "axios";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import { signInRequest, signUpRequest } from "../../api/auth";
 import { Auth, User } from "../../types/auth";
 import { setStorageUser } from "../user/userStorge";
+import { isLoggedInAtom } from "../../atom/atom";
+import { getUser } from "../../api/user";
 
 const useAuth = () => {
   const navigate = useNavigate();
+  const setIsLogged = useSetRecoilState(isLoggedInAtom);
   const { mutate: signInMutate } = useMutation(
     (data: User) => signInRequest(data),
     {
       onSuccess: (received) => {
         navigate("/");
-        setStorageUser(received.user.token);
-        console.log(received);
+        setStorageUser(JSON.stringify(received.user));
+        setIsLogged(received.user);
       },
     }
   );
 
-  const { mutate: signUpMutate } = useMutation(
+  const { mutate: signUpMutate } = useMutation<AxiosError, Error, Auth>(
     (data: Auth) => signUpRequest(data),
     {
       onSuccess: (received) => {
+        navigate("/login");
         console.log(received);
       },
     }

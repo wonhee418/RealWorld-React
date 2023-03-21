@@ -10,19 +10,11 @@ import { API } from "./api";
 // };
 
 export const signInRequest = async (user: User) => {
-  try {
-    const { data } = await API.post("/users/login", user);
-    return data;
-  } catch (error) {
-    return error;
-  }
+  const { data } = await API.post("/users/login", user);
+  return data;
 };
 
 export const signUpRequest = async (auth: Auth) => {
-  try {
-    const { data } = await API.post("/users", auth);
-    return data;
-  } catch (error) {
-    return error;
-  }
+  const { data } = await API.post("/users", auth);
+  return data;
 };

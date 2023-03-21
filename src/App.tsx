@@ -1,3 +1,4 @@
+import "./tailwind.css";
 import { QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { RouterProvider } from "react-router-dom";
@@ -10,20 +11,13 @@ import ReactRouterObject from "./routes";
 
 function App() {
   return (
-    <div className="App">
-      <RecoilRoot>
-        <QueryClientProvider client={queryClient}>
-          <Header />
-          {/* TODO: fallbackElement는 앱이 작동중이라는것을 표시하기위한 컴포넌트를 사용권장 */}
-          <RouterProvider
-            router={ReactRouterObject}
-            fallbackElement={<Home />}
-          />
-          <Footer />
-          <ReactQueryDevtools />
-        </QueryClientProvider>
-      </RecoilRoot>
-    </div>
+    <RecoilRoot>
+      <QueryClientProvider client={queryClient}>
+        {/* TODO: fallbackElement는 앱이 작동중이라는것을 표시하기위한 컴포넌트를 사용권장 */}
+        <RouterProvider router={ReactRouterObject} fallbackElement={<Home />} />
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </RecoilRoot>
   );
 }
 
