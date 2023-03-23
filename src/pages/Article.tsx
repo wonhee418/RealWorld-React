@@ -1,30 +1,44 @@
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { isLoggedInAtom } from "../atom/atom";
-import { getStorageUser } from "../constants/user/userStorge";
+import CommentItem from "../components/article/CommentItem";
+import { useCreateComment } from "../hooks/article/useCreateComment";
+import { useGetComments } from "../hooks/article/useGetComments";
 import { useGetDetailArticle } from "../hooks/article/useGetDetailArticle";
+import { Comment } from "../types/article";
 
 const Article = () => {
-  const { state } = useLocation();
+  const { state: slug } = useLocation();
   const { article, isLoading, isError, error, refetch } =
-    useGetDetailArticle(state);
+    useGetDetailArticle(slug);
   const myProfile = useRecoilValue(isLoggedInAtom);
-  console.log(myProfile);
+  const { comments, commentsIsLoading } = useGetComments(slug);
+  const [commentValue, setCommentValue] = useState("");
+  const createCommentMutate = useCreateComment();
+
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    createCommentMutate({ slug, commentValue });
+  };
+
+  const commentValueChangeHandle = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => [event.preventDefault(), setCommentValue(event.target.value)];
 
   return (
     <div className="article-page">
       <div className="banner">
         <div className="container">
+          {isLoading && <p>피드 로딩중..</p>}
           <h1>{article?.title}</h1>
 
           <div className="article-meta">
-            <a href="">
-              <img src={article?.author.image} />
-            </a>
+            <span>
+              <img src={article?.author.image} alt="profileImg" />
+            </span>
             <div className="info">
-              <a href="" className="author">
-                {article?.author.username}
-              </a>
+              <span className="author">{article?.author.username}</span>
               <span className="date">{article?.createdAt}</span>
             </div>
             <button className="btn btn-sm btn-outline-secondary">
@@ -44,6 +58,8 @@ const Article = () => {
       <div className="container page">
         <div className="row article-content">
           <div className="col-md-12">
+            {isLoading && <p>피드 로딩중..</p>}
+
             <p>{article?.body}</p>
           </div>
         </div>
@@ -65,12 +81,10 @@ const Article = () => {
         <div className="article-actions">
           <div className="article-meta">
             <a href="profile.html">
-              <img src={article?.author.image} />
+              <img src={article?.author.image} alt="profileImg" />
             </a>
             <div className="info text-[#5CB85C]">
-              <a href="" className="author">
-                {article?.author.username}
-              </a>
+              <span className="author">{article?.author.username}</span>
               <span className="date">{article?.createdAt}</span>
             </div>
             <button className="btn btn-sm btn-outline-secondary">
@@ -88,67 +102,37 @@ const Article = () => {
 
         <div className="row">
           <div className="col-xs-12 col-md-8 offset-md-2">
-            <form className="card comment-form">
+            <form className="card comment-form" onSubmit={onSubmit}>
               <div className="card-block">
                 <textarea
                   className="form-control"
                   placeholder="Write a comment..."
                   rows={3}
+                  value={commentValue}
+                  onChange={commentValueChangeHandle}
                 ></textarea>
               </div>
               <div className="card-footer">
-                <img src={myProfile.image} className="comment-author-img" />
-                <button className="btn btn-sm btn-primary">Post Comment</button>
+                <img
+                  src={myProfile.image}
+                  alt="profileImg"
+                  className="comment-author-img"
+                />
+                <button
+                  className="btn btn-sm btn-primary bg-[#5cb85c]"
+                  type="submit"
+                >
+                  Post Comment
+                </button>
               </div>
             </form>
-
-            <div className="card">
-              <div className="card-block">
-                <p className="card-text">
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-              </div>
-              <div className="card-footer">
-                <a href="" className="comment-author">
-                  <img
-                    src="http://i.imgur.com/Qr71crq.jpg"
-                    className="comment-author-img"
-                  />
-                </a>
-                &nbsp;
-                <a href="" className="comment-author">
-                  Jacob Schmidt
-                </a>
-                <span className="date-posted">Dec 29th</span>
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="card-block">
-                <p className="card-text">
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-              </div>
-              <div className="card-footer">
-                <a href="" className="comment-author">
-                  <img
-                    src="http://i.imgur.com/Qr71crq.jpg"
-                    className="comment-author-img"
-                  />
-                </a>
-                &nbsp;
-                <a href="" className="comment-author">
-                  Jacob Schmidt
-                </a>
-                <span className="date-posted">Dec 29th</span>
-                <span className="mod-options">
-                  <i className="ion-edit"></i>
-                  <i className="ion-trash-a"></i>
-                </span>
-              </div>
-            </div>
+            <>
+              {commentsIsLoading && <p>댓글 로딩중..</p>}
+              {comments?.comments &&
+                comments.comments.map((comment: Comment) => {
+                  return <CommentItem {...comment} />;
+                })}
+            </>
           </div>
         </div>
       </div>

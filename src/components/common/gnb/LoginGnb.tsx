@@ -26,7 +26,7 @@ const LoginGnb = (props: gnbProps) => {
       </li>
       <li
         className="nav-item nav-link cursor-pointer"
-        onClick={() => onNavigate("/editor")}
+        onClick={() => onNavigate("/setting")}
       >
         <i className="ion-gear-a"></i>&nbsp;Settings
       </li>

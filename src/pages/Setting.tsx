@@ -1,28 +1,47 @@
 import { useQuery } from "react-query";
 import { getUser } from "../api/user";
 import { Myprofile } from "../types/user";
+import { clearStorageUser } from "../constants/user/userStorge";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isLoggedInAtom } from "../atom/atom";
+
+interface user {
+  bio: null | any;
+  email: string;
+  image: string;
+  token: string;
+  username: string;
+}
 
 const Setting = () => {
-  const {
-    data: user,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useQuery<Myprofile>("user", () => getUser("wonhee123"));
+  const userProfile = useRecoilValue<user>(isLoggedInAtom);
+  const navigate = useNavigate();
+  const setLogged = useSetRecoilState(isLoggedInAtom);
+  // const {
+  //   data: user,
+  //   isLoading,
+  //   isError,
+  //   error,
+  //   refetch,
+  // } = useQuery<Myprofile>("user", () =>
+  //   getUser(userProfile.username as string)
+  // );
+  const { bio, image, username, email } = userProfile;
 
-  // const { bio, following, image, username, email } = user as Myprofile;
-  console.log(user);
-  console.log(isLoading);
-  console.log(isError);
+  const logoutHandler = () => {
+    navigate("/");
+    clearStorageUser();
+    setLogged(null);
+  };
 
-  if (isLoading) {
-    return isLoading && <p>로딩중..</p>;
-  }
+  // if (isLoading) {
+  //   return isLoading && <p>로딩중..</p>;
+  // }
 
-  if (isError) {
-    return <p>에러.. !</p>;
-  }
+  // if (isError) {
+  //   return <p>에러.. !</p>;
+  // }
   return (
     <div className="settings-page">
       <div className="container page">
@@ -37,6 +56,7 @@ const Setting = () => {
                     className="form-control"
                     type="text"
                     placeholder="URL of profile picture"
+                    value={image}
                   />
                 </fieldset>
                 <fieldset className="form-group">
@@ -44,6 +64,7 @@ const Setting = () => {
                     className="form-control form-control-lg"
                     type="text"
                     placeholder="Your Name"
+                    value={username}
                   />
                 </fieldset>
                 <fieldset className="form-group">
@@ -51,6 +72,7 @@ const Setting = () => {
                     className="form-control form-control-lg"
                     rows={8}
                     placeholder="Short bio about you"
+                    value={bio}
                   ></textarea>
                 </fieldset>
                 <fieldset className="form-group">
@@ -58,6 +80,7 @@ const Setting = () => {
                     className="form-control form-control-lg"
                     type="text"
                     placeholder="Email"
+                    value={email}
                   />
                 </fieldset>
                 <fieldset className="form-group">
@@ -73,7 +96,7 @@ const Setting = () => {
               </fieldset>
             </form>
             <hr />
-            <button className="btn btn-outline-danger">
+            <button className="btn btn-outline-danger" onClick={logoutHandler}>
               Or click here to logout.
             </button>
           </div>

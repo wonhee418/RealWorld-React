@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../components/common/Layout";
 import Article from "../pages/Article";
+import EditArticle from "../pages/EditArticle";
 import Home from "../pages/Home";
 
 import Login from "../pages/Login";
@@ -42,6 +43,7 @@ const RouterInfo: RouterItem[] = [
     elemnet: <Article />,
     withAuthorization: true,
   },
+  // TODO: 페이지 동적경로 설정하기
   {
     path: "/profile",
     elemnet: <Profile />,
@@ -56,6 +58,11 @@ const RouterInfo: RouterItem[] = [
   {
     path: "/setting",
     elemnet: <Setting />,
+    withAuthorization: false,
+  },
+  {
+    path: "/editor",
+    elemnet: <EditArticle />,
     withAuthorization: false,
   },
 ];

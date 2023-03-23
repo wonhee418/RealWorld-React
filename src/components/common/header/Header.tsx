@@ -13,7 +13,9 @@ const Header = () => {
     <>
       <nav className="navbar navbar-light">
         <div className="container">
-          <span className="navbar-brand">conduit</span>
+          <span className="navbar-brand" onClick={() => navigate("/")}>
+            conduit
+          </span>
           <ul className="nav navbar-nav pull-xs-right">
             <li
               className="nav-item cursor-pointer"

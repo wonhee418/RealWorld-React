@@ -12,6 +12,7 @@ export const setStorageUser = (user: string) => {
 
 export const clearStorageUser = () => {
   localStorage.removeItem(USER_LOCALSTORAGE_KEY);
+  localStorage.removeItem(USER_LOCALSTORAGE_KEY);
 };
 
 export const getStorageToken = () => {

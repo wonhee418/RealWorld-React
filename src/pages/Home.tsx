@@ -1,28 +1,49 @@
-import { ReactNode } from "react";
+import clsx from "clsx";
+import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { isLoggedInAtom } from "../atom/atom";
 import ArticleItem from "../components/article/ArticleItem";
 import { useGetArticle } from "../hooks/article/useGetArticle";
 import { useGetTag } from "../hooks/tag/useGetTag";
 import { Article } from "../types/article";
-import { Tag } from "../types/tag";
 
 const Home = () => {
   const isLogged = useRecoilValue(isLoggedInAtom);
-  const article = useGetArticle();
   const tag = useGetTag();
-  console.log(article);
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 20;
+  const { article, isLoading, isError, error } = useGetArticle(
+    limit,
+    currentPage
+  );
 
-  console.log(tag.tag);
+  const maxArticlePage = Math.ceil((article?.articlesCount as number) / limit);
 
-  if (article.isLoading) {
+  const pageNation = () => {
+    const articlePage = [];
+    for (let page = 1; page <= maxArticlePage; page++) {
+      articlePage.push(
+        <li
+          className={clsx(
+            "page-item ng-scope cursor-pointer",
+            page === currentPage ? "active" : ""
+          )}
+          onClick={() => setCurrentPage(page)}
+          key={page}
+        >
+          <span className="page-link ng-binding">{page}</span>
+        </li>
+      );
+    }
+    return articlePage;
+  };
+
+  if (isLoading) {
     return <p>로딩중 ..</p>;
   }
 
-  //
-
-  if (article.isError) {
-    return <p>에러.. ! {article.error?.message}</p>;
+  if (isError) {
+    return <p>에러.. ! {error?.message}</p>;
   }
 
   return (
@@ -39,12 +60,18 @@ const Home = () => {
           <div className="col-md-9">
             <div className="feed-toggle">
               <ul className="nav nav-pills outline-active">
-                {isLogged && <li className="nav-item">Your Feed</li>}
+                {isLogged && (
+                  <li className="nav-item">
+                    <span className="nav-link">Your Feed</span>
+                  </li>
+                )}
 
-                <li className="nav-item">Global Feed</li>
+                <li className="nav-item">
+                  <span className="nav-link active">Global Feed</span>
+                </li>
               </ul>
             </div>
-            {article.article?.map((article: Article, i) => {
+            {article?.articles?.map((article: Article, i) => {
               return <ArticleItem {...article} key={i} />;
             })}
           </div>
@@ -56,13 +83,21 @@ const Home = () => {
                 {/* HACK: any type 변경 필요  */}
                 {tag.tag?.map((tagValue: any) => {
                   return (
-                    <span className="tag-pill tag-default cursor-pointer">
+                    <span
+                      className="tag-pill tag-default cursor-pointer"
+                      key={tagValue}
+                    >
                       {tagValue}
                     </span>
                   );
                 })}
               </div>
             </div>
+          </div>
+          <div className="ng-isolate-scope">
+            <nav>
+              <ul className="pagination">{pageNation()}</ul>
+            </nav>
           </div>
         </div>
       </div>

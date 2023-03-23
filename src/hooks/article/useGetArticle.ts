@@ -1,16 +1,18 @@
 import { AxiosError } from "axios";
 import { useQuery } from "react-query";
 import { getArticle } from "../../api/article";
-import { Article } from "../../types/article";
+import { Articles } from "../../types/article";
 
-export const useGetArticle = () => {
+export const useGetArticle = (limit: number, current: number) => {
   const {
     data: article,
     isLoading,
     isError,
     error,
     refetch,
-  } = useQuery<Article[], AxiosError>("article", getArticle);
+  } = useQuery<Articles, AxiosError>(["article", current], () =>
+    getArticle(limit, current)
+  );
 
   return {
     article,

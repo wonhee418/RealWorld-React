@@ -21,8 +21,8 @@ const ArticleItem = (props: Article) => {
         <a href="profile.html">
           <img src={author.image} />
         </a>
-        <div className="info">
-          <span className="author">{author.username}</span>
+        <div className="info cursor-pointer">
+          <span className="author text-[#5CB85C]">{author.username}</span>
           <span className="date">January 20th</span>
         </div>
         <button className="btn btn-outline-primary btn-sm pull-xs-right">
@@ -33,9 +33,9 @@ const ArticleItem = (props: Article) => {
         className="preview-link"
         onClick={() => navigate("/article", { state: slug })}
       >
-        <h1>{title}</h1>
-        <p>{description}</p>
-        <span>Read more...</span>
+        <h1 className="cursor-pointer">{title}</h1>
+        <p className="cursor-pointer">{description}</p>
+        <span className="cursor-pointer">Read more...</span>
       </span>
     </div>
   );
