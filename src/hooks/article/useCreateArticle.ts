@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "react-query";
-import { createArticle, createComment } from "../../api/article";
+import { createArticle } from "../../api/article";
 import { useNavigate } from "react-router-dom";
 
 interface data {

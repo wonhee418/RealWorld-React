@@ -7,8 +7,6 @@ const axiosConfig: AxiosRequestConfig = {
   baseURL: BASE_URL,
 };
 
-console.log("Token " + getStorageToken());
-
 export const API = axios.create(axiosConfig);
 API.interceptors.request.use(
   (config) => {

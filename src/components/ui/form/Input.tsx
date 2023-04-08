@@ -7,7 +7,6 @@ import type {
 import { useController } from "react-hook-form";
 import type { InputBaseProps } from "./inputBase";
 import InputBase from "./inputBase";
-import { ReactNode } from "react";
 
 export interface InputProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -18,7 +17,7 @@ export interface InputProps<
     >,
     UseControllerProps<TFieldValues, TName> {
   contained?: boolean;
-  rightIcon?: ReactNode;
+  onEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const Input = <
@@ -31,10 +30,10 @@ const Input = <
     control,
     defaultValue,
     name,
-    rightIcon,
     rules,
     contained,
     shouldUnregister,
+    onEnter,
     ...rest
   } = props;
 
@@ -56,6 +55,7 @@ const Input = <
         {...field}
         contained={contained}
         onChange={onChange}
+        onEnter={onEnter}
       />
       {error && <div className="text-red-500">{error.message}</div>}
     </div>

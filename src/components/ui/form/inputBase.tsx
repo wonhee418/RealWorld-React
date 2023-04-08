@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { InputHTMLAttributes, ReactNode } from "react";
+import type { InputHTMLAttributes } from "react";
 import { forwardRef } from "react";
 
 export interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -7,6 +7,7 @@ export interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
   maxLength?: number;
   message?: string;
   onChange: (...event: any[]) => void;
+  onEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   readOnly?: boolean;
   contained?: boolean;
@@ -17,6 +18,7 @@ const InputBase = forwardRef<HTMLInputElement, InputBaseProps>((props, ref) => {
     className,
     fullWidth,
     onChange,
+    onEnter,
     placeholder,
     contained,
     readOnly,
@@ -37,11 +39,11 @@ const InputBase = forwardRef<HTMLInputElement, InputBaseProps>((props, ref) => {
           className
         )}
         placeholder={placeholder}
-        readOnly={readOnly}
         type={type}
         onChange={(e) => {
           onChange(e.target.value);
         }}
+        onKeyDown={onEnter}
         {...rest}
       />
     </span>

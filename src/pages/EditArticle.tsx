@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Textarea from "../components/ui/form/Textarea";
 import { useCreateArticle } from "../hooks/article/useCreateArticle";
+import { useState } from "react";
 
 type FormValues = {
   articleTitle: string;
@@ -23,19 +24,36 @@ const schema = yup
   .required();
 
 const EditArticle = () => {
-  const { handleSubmit, control } = useForm<FormValues>({
+  const { handleSubmit, control, getValues } = useForm<FormValues>({
     resolver: yupResolver(schema), // yup, joi and even your own.
   });
-  const createArticleMutate = useCreateArticle();
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    let tagArr = [];
-    tagArr.push(data.tag);
 
+  const [tagList, setTagList] = useState<string[]>([]);
+  const createArticleMutate = useCreateArticle();
+
+  const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (!tagList.includes(getValues().tag)) {
+        addTag(getValues().tag);
+      }
+    }
+  };
+  const addTag = (newTag: string) => {
+    setTagList([...tagList, newTag]);
+  };
+
+  const removeTag = (tag: string) => {
+    setTagList(tagList.filter((prevTag) => prevTag !== tag));
+  };
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    console.log(tagList);
     const article = {
       title: data.articleTitle,
       description: data.articleAbout,
       body: data.article,
-      tagList: tagArr,
+      tagList: tagList,
     };
 
     createArticleMutate(article);
@@ -79,12 +97,20 @@ const EditArticle = () => {
                     placeholder="Enter tags"
                     control={control}
                     name="tag"
+                    onEnter={onEnter}
                   />
                   <div className="tag-list">
-                    <span className="tag-default tag-pill ng-binding ng-scope">
-                      <i className="ion-close-round"></i>
-                      xorm
-                    </span>
+                    {tagList.map((tag) => {
+                      return (
+                        <span className="tag-default tag-pill ng-binding ng-scope">
+                          <i
+                            className="ion-close-round"
+                            onClick={() => removeTag(tag)}
+                          ></i>
+                          {tag}
+                        </span>
+                      );
+                    })}
                   </div>
                 </fieldset>
                 <button
