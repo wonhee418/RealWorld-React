@@ -7,19 +7,26 @@ import { useCreateComment } from "../hooks/article/useCreateComment";
 import { useGetComments } from "../hooks/article/useGetComments";
 import { useGetDetailArticle } from "../hooks/article/useGetDetailArticle";
 import { Comment } from "../types/article";
+import useDeleteArticle from "../hooks/article/useDeleteArticle";
 
 const Article = () => {
-  const { state: slug } = useLocation();
-  const { article, isLoading, isError, error, refetch } =
-    useGetDetailArticle(slug);
+  const { slug, author } = useLocation().state;
+  const { article, isLoading, isError, error } = useGetDetailArticle(slug);
   const myProfile = useRecoilValue(isLoggedInAtom);
   const { comments, commentsIsLoading } = useGetComments(slug);
   const [commentValue, setCommentValue] = useState("");
   const createCommentMutate = useCreateComment();
+  const date = new Date(article?.createdAt as string).toDateString();
+
+  const deleteArticleMutate = useDeleteArticle();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     createCommentMutate({ slug, commentValue });
+  };
+
+  const removeArticleHandle = (slug: string) => {
+    deleteArticleMutate(slug);
   };
 
   const commentValueChangeHandle = (
@@ -39,18 +46,36 @@ const Article = () => {
             </span>
             <div className="info">
               <span className="author">{article?.author.username}</span>
-              <span className="date">{article?.createdAt}</span>
+              <span className="date">{date}</span>
             </div>
-            <button className="btn btn-sm btn-outline-secondary">
-              <i className="ion-plus-round"></i>
-              &nbsp; Follow {article?.author.username}
-            </button>
-            &nbsp;&nbsp;
-            <button className="btn btn-sm btn-outline-primary">
-              <i className="ion-heart"></i>
-              &nbsp; Favorite Post
-              <span className="counter">({article?.favoritesCount})</span>
-            </button>
+            <div className="inline-block">
+              {author.username === myProfile.username ? (
+                <>
+                  <span className="btn btn-outline-secondary btn-sm">
+                    <i className="ion-edit"></i> Edit Article
+                  </span>
+                  <button
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={() => removeArticleHandle(article!.slug)}
+                  >
+                    <i className="ion-trash-a"></i> Delete Article
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className="btn btn-sm btn-outline-secondary">
+                    <i className="ion-plus-round"></i>
+                    &nbsp; Follow {article?.author.username}
+                  </button>
+                  &nbsp;&nbsp;
+                  <button className="btn btn-sm btn-outline-primary">
+                    <i className="ion-heart"></i>
+                    &nbsp; Favorite Post
+                    <span className="counter">({article?.favoritesCount})</span>
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -59,7 +84,6 @@ const Article = () => {
         <div className="row article-content">
           <div className="col-md-12">
             {isLoading && <p>피드 로딩중..</p>}
-
             <p>{article?.body}</p>
           </div>
         </div>
@@ -80,23 +104,41 @@ const Article = () => {
 
         <div className="article-actions">
           <div className="article-meta">
-            <a href="profile.html">
+            <span>
               <img src={article?.author.image} alt="profileImg" />
-            </a>
+            </span>
             <div className="info text-[#5CB85C]">
               <span className="author">{article?.author.username}</span>
-              <span className="date">{article?.createdAt}</span>
+              <span className="date">{date}</span>
             </div>
-            <button className="btn btn-sm btn-outline-secondary">
-              <i className="ion-plus-round"></i>
-              &nbsp; Follow {article?.author.username}
-            </button>
-            &nbsp;
-            <button className="btn btn-sm btn-outline-primary">
-              <i className="ion-heart"></i>
-              &nbsp; Favorite Post
-              <span className="counter">({article?.favoritesCount})</span>
-            </button>
+            <div className="inline-block">
+              {author.username === myProfile.username ? (
+                <>
+                  <span className="btn btn-outline-secondary btn-sm">
+                    <i className="ion-edit"></i> Edit Article
+                  </span>
+                  <button
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={() => removeArticleHandle(article!.slug)}
+                  >
+                    <i className="ion-trash-a"></i> Delete Article
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className="btn btn-sm btn-outline-secondary">
+                    <i className="ion-plus-round"></i>
+                    &nbsp; Follow {article?.author.username}
+                  </button>
+                  &nbsp;&nbsp;
+                  <button className="btn btn-sm btn-outline-primary">
+                    <i className="ion-heart"></i>
+                    &nbsp; Favorite Post
+                    <span className="counter">({article?.favoritesCount})</span>
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
 

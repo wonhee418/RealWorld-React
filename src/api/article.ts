@@ -21,11 +21,6 @@ export const getDetailArticle = async (slug: string) => {
   return data.article;
 };
 
-export const getComment = async (slug: string) => {
-  const { data } = await API.get(`/articles/${slug}/comments`);
-  return data;
-};
-
 export const createArticle = async (article: articleProps) => {
   const { data } = await API.post(`/articles`, {
     article: {
@@ -35,6 +30,16 @@ export const createArticle = async (article: articleProps) => {
       tagList: article.tagList,
     },
   });
+  return data;
+};
+
+export const removeArticle = async (slug: string) => {
+  const { data } = await API.delete(`/articles/${slug}`);
+  return data;
+};
+
+export const getComment = async (slug: string) => {
+  const { data } = await API.get(`/articles/${slug}/comments`);
   return data;
 };
 

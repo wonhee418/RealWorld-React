@@ -10,7 +10,7 @@ import { Article } from "../types/article";
 const Home = () => {
   const isLogged = useRecoilValue(isLoggedInAtom);
   const tag = useGetTag();
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const limit = 20;
   const { article, isLoading, isError, error } = useGetArticle(
     limit,
@@ -37,10 +37,6 @@ const Home = () => {
     }
     return articlePage;
   };
-
-  if (isLoading) {
-    return <p>로딩중 ..</p>;
-  }
 
   if (isError) {
     return <p>에러.. ! {error?.message}</p>;
@@ -71,6 +67,7 @@ const Home = () => {
                 </li>
               </ul>
             </div>
+            {isLoading && <div>피드 로딩중입니다...</div>}
             {article?.articles?.map((article: Article, i) => {
               return <ArticleItem {...article} key={i} />;
             })}

@@ -8,12 +8,11 @@ interface childrenProps {
 
 const Layout = (props: childrenProps) => {
   return (
-    <>
+    <div className="">
       <Header />
-      {props.children}
-      <Outlet />
+      <div className="">{props.children}</div>
       <Footer />
-    </>
+    </div>
   );
 };
 

@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 import { useQuery } from "react-query";
 import { getDetailArticle } from "../../api/article";
 import { Article } from "../../types/article";
+import { queryKey } from "../../lib/react-query/constants";
 
 export const useGetDetailArticle = (slug: string) => {
   const {
@@ -10,7 +11,7 @@ export const useGetDetailArticle = (slug: string) => {
     isError,
     error,
     refetch,
-  } = useQuery<Article, AxiosError>(["article", slug], () =>
+  } = useQuery<Article, AxiosError>([`${queryKey.article}`, slug], () =>
     getDetailArticle(slug)
   );
 

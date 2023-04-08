@@ -13,7 +13,10 @@ const Header = () => {
     <>
       <nav className="navbar navbar-light">
         <div className="container">
-          <span className="navbar-brand" onClick={() => navigate("/")}>
+          <span
+            className="navbar-brand cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             conduit
           </span>
           <ul className="nav navbar-nav pull-xs-right">
