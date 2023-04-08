@@ -1,6 +1,3 @@
-import { useState } from "react";
-import { useCreateComment } from "../../hooks/article/useCreateComment";
-
 export interface Comment {
   id: number;
   createdAt: string;
@@ -16,6 +13,7 @@ export interface Comment {
 
 const CommentItem = (props: Comment) => {
   const { id, body, author, createdAt } = props;
+
   return (
     <div className="card">
       <div className="card-block">

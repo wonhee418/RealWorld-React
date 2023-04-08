@@ -128,9 +128,9 @@ const Article = () => {
             </form>
             <>
               {commentsIsLoading && <p>댓글 로딩중..</p>}
-              {comments?.comments &&
+              {comments &&
                 comments.comments.map((comment: Comment) => {
-                  return <CommentItem {...comment} />;
+                  return <CommentItem key={comment.id} {...comment} />;
                 })}
             </>
           </div>

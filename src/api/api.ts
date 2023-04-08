@@ -7,12 +7,12 @@ const axiosConfig: AxiosRequestConfig = {
   baseURL: BASE_URL,
 };
 
-console.log(getStorageToken());
+console.log("Token " + getStorageToken());
 
 export const API = axios.create(axiosConfig);
 API.interceptors.request.use(
   (config) => {
-    config.headers.Authorization = getStorageToken();
+    config.headers.Authorization = "Token " + getStorageToken();
     return config;
   },
   (error: AxiosError): Promise<AxiosError> => {

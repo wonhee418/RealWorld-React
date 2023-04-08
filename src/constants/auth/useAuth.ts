@@ -1,12 +1,11 @@
 import { AxiosError } from "axios";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { signInRequest, signUpRequest } from "../../api/auth";
 import { Auth, User } from "../../types/auth";
 import { setStorageUser } from "../user/userStorge";
 import { isLoggedInAtom } from "../../atom/atom";
-import { getUser } from "../../api/user";
 
 const useAuth = () => {
   const navigate = useNavigate();
