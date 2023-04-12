@@ -1,5 +1,7 @@
 import { useRecoilValue } from "recoil";
 import { isLoggedInAtom } from "../../../atom/atom";
+import { NavLink } from "react-router-dom";
+import clsx from "clsx";
 interface gnbProps {
   onNavigate: (link: string) => void;
 }
@@ -19,23 +21,38 @@ const LoginGnb = (props: gnbProps) => {
   return (
     <>
       <li
-        className="nav-item nav-link cursor-pointer"
+        className="nav-item cursor-pointer"
         onClick={() => onNavigate("/editor")}
       >
-        <i className="ion-compose"></i>&nbsp;New Article
+        <NavLink
+          to={"/editor"}
+          className={({ isActive }) => clsx("nav-link", isActive && "active")}
+        >
+          <i className="ion-compose"></i> New Article
+        </NavLink>
       </li>
       <li
-        className="nav-item nav-link cursor-pointer"
+        className="nav-item cursor-pointer"
         onClick={() => onNavigate("/setting")}
       >
-        <i className="ion-gear-a"></i>&nbsp;Settings
+        <NavLink
+          to={"/setting"}
+          className={({ isActive }) => clsx("nav-link", isActive && "active")}
+        >
+          <i className="ion-gear-a"></i>&nbsp;Settings
+        </NavLink>
       </li>
       <li
-        className="nav-item nav-link cursor-pointer"
+        className="nav-item cursor-pointer"
         onClick={() => onNavigate(`/profile`)}
       >
-        <img src={user.image} className="user-pic" alt="propfileImg" />
-        {user.username}
+        <NavLink
+          to={"/profile"}
+          className={({ isActive }) => clsx("nav-link", isActive && "active")}
+        >
+          <img src={user.image} className="user-pic" alt="propfileImg" />
+          {user.username}
+        </NavLink>
       </li>
     </>
   );

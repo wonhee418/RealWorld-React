@@ -55,7 +55,6 @@ const EditArticle = () => {
       body: data.article,
       tagList: tagList,
     };
-
     createArticleMutate(article);
   };
 

@@ -1,3 +1,6 @@
+import clsx from "clsx";
+import { NavLink } from "react-router-dom";
+
 interface gnbProps {
   onNavigate: (link: string) => void;
 }
@@ -7,10 +10,24 @@ const LogoutGnb = (props: gnbProps) => {
   return (
     <>
       <li className="nav-item" onClick={() => onNavigate("/login")}>
-        <span className="nav-link cursor-pointer">Sign in</span>
+        <NavLink
+          to={"/login"}
+          className={({ isActive }) =>
+            clsx("nav-link cursor-pointer", isActive && "active")
+          }
+        >
+          Sign in
+        </NavLink>
       </li>
       <li className="nav-item" onClick={() => onNavigate("/register")}>
-        <span className="nav-link cursor-pointer">Sign up</span>
+        <NavLink
+          to={"/resigter"}
+          className={({ isActive }) =>
+            clsx("nav-link cursor-pointer", isActive && "active")
+          }
+        >
+          Sign up
+        </NavLink>
       </li>
     </>
   );

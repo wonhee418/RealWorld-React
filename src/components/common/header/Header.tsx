@@ -1,9 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { isLoggedInAtom } from "../../../atom/atom";
 import { Myprofile } from "../../../types/user";
 import LoginGnb from "../gnb/LoginGnb";
 import LogoutGnb from "../gnb/LogoutGnb";
+import clsx from "clsx";
 
 const Header = () => {
   const isLogged = useRecoilValue<Myprofile>(isLoggedInAtom);
@@ -24,7 +25,14 @@ const Header = () => {
               className="nav-item cursor-pointer"
               onClick={() => navigate("/")}
             >
-              <span className="nav-link active">Home</span>
+              <NavLink
+                to={"/"}
+                className={({ isActive }) =>
+                  clsx("nav-link", isActive && "active")
+                }
+              >
+                Home
+              </NavLink>
             </li>
             {isLogged && <LoginGnb onNavigate={navigate} />}
             {!isLogged && <LogoutGnb onNavigate={navigate} />}
