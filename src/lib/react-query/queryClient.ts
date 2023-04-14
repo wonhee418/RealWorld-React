@@ -14,8 +14,8 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       onError: queryErrorHandler,
-      staleTime: 0,
-      cacheTime: 0,
+      staleTime: 10000,
+      cacheTime: 600000,
       refetchOnMount: false, // 마운트시 리페치 여부
       refetchOnReconnect: false, // 재연결시 리페치 여부
       refetchOnWindowFocus: false, // 윈도우포커스시 리페치 여부, (브라우저 클릭)

@@ -34,7 +34,9 @@ const ArticleItem = (props: Article) => {
       </div>
       <span
         className="preview-link"
-        onClick={() => navigate("/article", { state: { slug, author } })}
+        onClick={() =>
+          navigate(`/article/${slug}`, { state: { slug, author } })
+        }
       >
         <h1 className="cursor-pointer">{title}</h1>
         <p className="cursor-pointer">{description}</p>

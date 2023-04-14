@@ -42,8 +42,13 @@ const RouterInfo: RouterItem[] = [
     path: "/article",
     elemnet: <Article />,
     withAuthorization: true,
+    children: [
+      {
+        path: ":slug",
+        element: <Article />,
+      },
+    ],
   },
-  // TODO: 페이지 동적경로 설정하기
   {
     path: "/profile",
     elemnet: <Profile />,
@@ -69,7 +74,30 @@ const RouterInfo: RouterItem[] = [
 
 const ReactRouterObject = createBrowserRouter(
   RouterInfo.map((routerInfo) => {
-    return routerInfo.withAuthorization
+    return routerInfo.children
+      ? {
+          path: routerInfo.path,
+          element: (
+            <Layout>
+              <Authorization currentPath={routerInfo.path}>
+                {routerInfo.elemnet}
+              </Authorization>
+            </Layout>
+          ),
+          children: [
+            {
+              path: routerInfo.children[0].path,
+              element: (
+                <Layout>
+                  <Authorization currentPath={routerInfo.children[0].path}>
+                    {routerInfo.children[0].element}
+                  </Authorization>
+                </Layout>
+              ),
+            },
+          ],
+        }
+      : routerInfo.withAuthorization
       ? {
           path: routerInfo.path,
           element: (

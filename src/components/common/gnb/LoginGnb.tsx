@@ -44,10 +44,10 @@ const LoginGnb = (props: gnbProps) => {
       </li>
       <li
         className="nav-item cursor-pointer"
-        onClick={() => onNavigate(`/profile`)}
+        onClick={() => onNavigate(`/profile/${user.username}`)}
       >
         <NavLink
-          to={"/profile"}
+          to={`/profile/${user.username}`}
           className={({ isActive }) => clsx("nav-link", isActive && "active")}
         >
           <img src={user.image} className="user-pic" alt="propfileImg" />
