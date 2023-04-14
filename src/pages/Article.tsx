@@ -8,6 +8,7 @@ import { useGetComments } from "../hooks/article/useGetComments";
 import { useGetDetailArticle } from "../hooks/article/useGetDetailArticle";
 import { Comment } from "../types/article";
 import useDeleteArticle from "../hooks/article/useDeleteArticle";
+import Spinner from "../components/ui/spinner";
 
 const Article = () => {
   const { slug, author } = useLocation().state;
@@ -15,7 +16,7 @@ const Article = () => {
   const myProfile = useRecoilValue(isLoggedInAtom);
   const { comments, commentsIsLoading } = useGetComments(slug);
   const [commentValue, setCommentValue] = useState("");
-  const createCommentMutate = useCreateComment();
+  const createCommentMutate = useCreateComment(slug);
   const date = new Date(article?.createdAt as string).toDateString();
 
   const deleteArticleMutate = useDeleteArticle();
@@ -37,7 +38,7 @@ const Article = () => {
     <div className="article-page">
       <div className="banner">
         <div className="container">
-          {isLoading && <p>피드 로딩중..</p>}
+          {isLoading && <Spinner />}
           <h1>{article?.title}</h1>
 
           <div className="article-meta">
@@ -83,7 +84,7 @@ const Article = () => {
       <div className="container page">
         <div className="row article-content">
           <div className="col-md-12">
-            {isLoading && <p>피드 로딩중..</p>}
+            {isLoading && <Spinner />}
             <p>{article?.body}</p>
           </div>
         </div>
@@ -169,10 +170,12 @@ const Article = () => {
               </div>
             </form>
             <>
-              {commentsIsLoading && <p>댓글 로딩중..</p>}
+              {commentsIsLoading && <Spinner />}
               {comments &&
                 comments.comments.map((comment: Comment) => {
-                  return <CommentItem key={comment.id} {...comment} />;
+                  return (
+                    <CommentItem key={comment.id} {...comment} slug={slug} />
+                  );
                 })}
             </>
           </div>

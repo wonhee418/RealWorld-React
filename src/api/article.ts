@@ -1,7 +1,8 @@
 import { API } from "./api";
-interface props {
+interface commentProps {
   slug: string;
-  commentValue: string;
+  commentValue?: string;
+  id?: number;
 }
 
 interface articleProps {
@@ -43,11 +44,18 @@ export const getComment = async (slug: string) => {
   return data;
 };
 
-export const createComment = async (props: props) => {
+export const createComment = async (props: commentProps) => {
   const { data } = await API.post(`/articles/${props.slug}/comments`, {
     comment: {
       body: props.commentValue,
     },
   });
+  return data;
+};
+
+export const removeComment = async (props: commentProps) => {
+  const { data } = await API.delete(
+    `/articles/${props.slug}/comments/${props.id}`
+  );
   return data;
 };

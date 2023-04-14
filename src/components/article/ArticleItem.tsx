@@ -20,9 +20,7 @@ const ArticleItem = (props: Article) => {
   return (
     <div className="article-preview">
       <div className="article-meta">
-        <a href="profile.html">
-          <img src={author.image} />
-        </a>
+        <img src={author.image} alt="authorImg" />
         <div className="info cursor-pointer">
           <span className="author text-[#5CB85C]">{author.username}</span>
           <span className="date">{date}</span>

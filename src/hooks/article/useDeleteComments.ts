@@ -1,17 +1,17 @@
 import { useMutation, useQueryClient } from "react-query";
-import { createComment } from "../../api/article";
+import { removeComment } from "../../api/article";
 import { queryKey } from "../../lib/react-query/constants";
 
-interface props {
+interface commentProps {
   slug: string;
-  commentValue: string;
+  id: number;
 }
 
-export const useCreateComment = (slug: string) => {
+const useDeleteComments = (slug: string) => {
   const queryClient = useQueryClient();
 
-  const { mutate: createCommentMutate } = useMutation(
-    (data: props) => createComment(data),
+  const { mutate: deleteCommentMutate } = useMutation(
+    (comment: commentProps) => removeComment(comment),
     {
       onSuccess: (res) => {
         console.log(res);
@@ -20,5 +20,7 @@ export const useCreateComment = (slug: string) => {
     }
   );
 
-  return createCommentMutate;
+  return deleteCommentMutate;
 };
+
+export default useDeleteComments;

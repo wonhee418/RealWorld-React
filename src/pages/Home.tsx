@@ -6,6 +6,7 @@ import ArticleItem from "../components/article/ArticleItem";
 import { useGetArticle } from "../hooks/article/useGetArticle";
 import { useGetTag } from "../hooks/tag/useGetTag";
 import { Article } from "../types/article";
+import Spinner from "../components/ui/spinner";
 
 const Home = () => {
   const isLogged = useRecoilValue(isLoggedInAtom);
@@ -54,20 +55,18 @@ const Home = () => {
       <div className="container page">
         <div className="row">
           <div className="col-md-9">
-            <div className="feed-toggle">
-              <ul className="nav nav-pills outline-active">
-                {isLogged && (
-                  <li className="nav-item">
-                    <span className="nav-link">Your Feed</span>
-                  </li>
-                )}
-
+            <ul className="nav nav-pills outline-active">
+              {isLogged && (
                 <li className="nav-item">
-                  <span className="nav-link active">Global Feed</span>
+                  <span className="nav-link">Your Feed</span>
                 </li>
-              </ul>
-            </div>
-            {isLoading && <div>피드 로딩중입니다...</div>}
+              )}
+
+              <li className="nav-item">
+                <span className="nav-link active">Global Feed</span>
+              </li>
+            </ul>
+            {isLoading && <Spinner />}
             {article?.articles?.map((article: Article, i) => {
               return <ArticleItem {...article} key={i} />;
             })}

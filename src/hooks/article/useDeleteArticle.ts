@@ -11,7 +11,7 @@ const useDeleteArticle = () => {
     (slug: string) => removeArticle(slug),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([`${queryKey.article}, 1`]);
+        queryClient.invalidateQueries([queryKey.article, "1"]);
         navigate(-1);
       },
     }

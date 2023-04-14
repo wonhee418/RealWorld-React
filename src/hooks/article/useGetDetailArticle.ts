@@ -11,7 +11,7 @@ export const useGetDetailArticle = (slug: string) => {
     isError,
     error,
     refetch,
-  } = useQuery<Article, AxiosError>([`${queryKey.article}`, slug], () =>
+  } = useQuery<Article, AxiosError>([queryKey.article, slug], () =>
     getDetailArticle(slug)
   );
 
