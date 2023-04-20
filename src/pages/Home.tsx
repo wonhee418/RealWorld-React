@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { isLoggedInAtom } from "../atom/atom";
 import ArticleItem from "../components/article/ArticleItem";
@@ -7,12 +7,16 @@ import { useGetArticle } from "../hooks/article/useGetArticle";
 import { useGetTag } from "../hooks/tag/useGetTag";
 import { Article } from "../types/article";
 import Spinner from "../components/ui/spinner";
+import { useQueryClient } from "react-query";
+import { queryKey } from "../lib/react-query/constants";
+import { getArticle } from "../api/article";
 
 const Home = () => {
   const isLogged = useRecoilValue(isLoggedInAtom);
   const tag = useGetTag();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const limit = 20;
+  const queryClient = useQueryClient();
   const { article, isLoading, isError, error } = useGetArticle(
     limit,
     currentPage
@@ -38,6 +42,16 @@ const Home = () => {
     }
     return articlePage;
   };
+
+  useEffect(() => {
+    const nextPage = currentPage + 1;
+    if (currentPage < limit) {
+      queryClient.prefetchQuery([queryKey.article, nextPage], () =>
+        getArticle(limit, nextPage)
+      );
+    }
+    window.scrollTo(0, 0);
+  }, [currentPage, queryClient]);
 
   if (isError) {
     return <p>에러.. ! {error?.message}</p>;
@@ -77,6 +91,7 @@ const Home = () => {
               <p>Popular Tags</p>
               <div className="tag-list">
                 {/* HACK: any type 변경 필요  */}
+                {tag.isLoading && <Spinner />}
                 {tag.tag?.map((tagValue: any) => {
                   return (
                     <span

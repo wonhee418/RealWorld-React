@@ -11,8 +11,12 @@ export const useGetArticle = (limit: number, current: number) => {
     isError,
     error,
     refetch,
-  } = useQuery<Articles, AxiosError>([queryKey.article, current], () =>
-    getArticle(limit, current)
+  } = useQuery<Articles, AxiosError>(
+    [queryKey.article, current],
+    () => getArticle(limit, current),
+    {
+      keepPreviousData: true,
+    }
   );
 
   return {

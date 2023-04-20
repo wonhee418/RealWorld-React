@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "react-query";
 import { createArticle } from "../../api/article";
 import { useNavigate } from "react-router-dom";
+import { queryKey } from "../../lib/react-query/constants";
 
 interface data {
   title: string;
@@ -17,8 +18,7 @@ export const useCreateArticle = () => {
     (data: data) => createArticle(data),
     {
       onSuccess: (received) => {
-        console.log(received);
-        queryClient.invalidateQueries(["article", "1"]);
+        queryClient.invalidateQueries([queryKey.article, "1"]);
         navigate("/");
       },
     }
